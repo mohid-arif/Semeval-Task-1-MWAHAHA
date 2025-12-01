@@ -35,27 +35,27 @@ bash run_all.sh
 
 ### Run an individual model:
 
-python baseline_ngram.py
-python baseline_seq2seq.py
-python baseline_gpt2.py
-python baseline_t5.py
-
+python baseline_ngram.py  
+python baseline_seq2seq.py  
+python baseline_gpt2.py  
+python baseline_t5.py  
+  
 
 ### Evaluate predictions:
 
-python evaluate_models.py
+python evaluate_models.py  
 
 ### Predictions are stored in:
 
-outputs/
-├── GPT2_preds.csv
-├── ngram_preds.csv
-├── seq2seq_preds.csv
-└── T5_preds.csv
-
+outputs/  
+├── GPT2_preds.csv  
+├── ngram_preds.csv  
+├── seq2seq_preds.csv  
+└── T5_preds.csv  
+  
 
 ## Evaluation summaries:
 
-evaluated_results.csv — BLEU/ROUGE scores
-
-merged_models.csv — unified predictions from all models
+evaluated_results.csv — BLEU/ROUGE scores  
+  
+merged_models.csv — unified predictions from all models  

@@ -1,4 +1,3 @@
-ChatGPT said:
 # MWAHAHA: Humor Generation Baselines
 
 This repository contains baseline implementations for SemEval-2026 Task A: **Computational Humor Generation**. It includes four models (N-gram, Seq2Seq, GPT-2, T5), preprocessing utilities, evaluation scripts, and generated predictions.

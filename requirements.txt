@@ -1,0 +1,9 @@
+numpy
+pandas
+tqdm
+nltk
+torch>=1.10
+transformers>=4.10.0
+sentencepiece
+rouge-score
+scikit-learn

@@ -5,20 +5,20 @@ This repository contains baseline implementations for SemEval-2026 Task A: **Com
 
 ## Repository Structure
 
-
-
-baseline_gpt2.py # GPT-2 fine-tuning baseline
-baseline_ngram.py # N-gram LM baseline
-baseline_seq2seq.py # LSTM Seq2Seq baseline
-baseline_t5.py # T5 text-to-text baseline
-data_utils.py # Preprocessing + dataset loading
-evaluate_models.py # BLEU/ROUGE evaluation
-evaluated_results.csv # Final evaluation metrics
-merged_models.csv # Combined predictions
-requirements.txt
-run_all.sh # End-to-end pipeline
-data/train.tsv # Training data
-outputs/ # Model predictions
+  
+  
+baseline_gpt2.py # GPT-2 fine-tuning baseline  
+baseline_ngram.py # N-gram LM baseline  
+baseline_seq2seq.py # LSTM Seq2Seq baseline  
+baseline_t5.py # T5 text-to-text baseline  
+data_utils.py # Preprocessing + dataset loading  
+evaluate_models.py # BLEU/ROUGE evaluation  
+evaluated_results.csv # Final evaluation metrics  
+merged_models.csv # Combined predictions  
+requirements.txt  
+run_all.sh # End-to-end pipeline  
+data/train.tsv # Training data  
+outputs/ # Model predictions  
 
 
 ## Usage

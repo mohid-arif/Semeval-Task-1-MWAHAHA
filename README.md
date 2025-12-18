@@ -8,12 +8,12 @@ Baseline Pipeline Implementation, and Proposed Solution for **SemEval 2026 Task 
 ## 📌 About the Task
 
 **SemEval 2026 Task 1 — MWAHAHA** is a shared task in computational humor generation that challenges participants to build systems capable of generating genuinely humorous content and evaluating it with human annotations.  
-The task explores the frontier of humor generation by requiring models to produce creative, funny text under defined constraints, pushing beyond standard language modeling towards **computational creativity**. :contentReference[oaicite:1]{index=1}
+The task explores the frontier of humor generation by requiring models to produce creative, funny text under defined constraints, pushing beyond standard language modeling towards **computational creativity**.
 
 The task includes multiple subtasks and languages (e.g., English, Spanish, Chinese), focusing on:
-* **Text-based humor generation**
+* **Text-based humor generation**. For the scope of this task, we are focusing only on English.
 
-Participants are evaluated based on how well their models produce humorous output that aligns with human judgments. :contentReference[oaicite:2]{index=2}
+Participants are evaluated based on how well their models produce humorous output that aligns with human judgments.
 
 ---
 

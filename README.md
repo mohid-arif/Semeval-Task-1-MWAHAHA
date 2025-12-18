@@ -1,6 +1,6 @@
 # SemEval-Task-1-MWAHAHA
 
-Baseline Pipeline Implementation for **SemEval 2026 Task 1: MWAHAHA**  
+Baseline Pipeline Implementation, and Proposed Solution for **SemEval 2026 Task 1: MWAHAHA**  
 (Models Write Automatic Humor And Humans Annotate)
 
 ---
@@ -12,7 +12,6 @@ The task explores the frontier of humor generation by requiring models to produc
 
 The task includes multiple subtasks and languages (e.g., English, Spanish, Chinese), focusing on:
 * **Text-based humor generation**
-* **Humorous captioning for images and GIFs** (if applicable)
 
 Participants are evaluated based on how well their models produce humorous output that aligns with human judgments. :contentReference[oaicite:2]{index=2}
 
@@ -20,7 +19,7 @@ Participants are evaluated based on how well their models produce humorous outpu
 
 ## 🧠 Repository Overview
 
-This repository provides a **baseline pipeline** for participating in SemEval 2026 Task 1: MWAHAHA.  
+This repository provides a **baseline pipeline** and **proposed solution** for participating in SemEval 2026 Task 1: MWAHAHA.  
 It includes:
 * Core scripts to preprocess data
 * Model training and evaluation pipelines

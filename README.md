@@ -62,89 +62,101 @@ Given a GIF image, generate a humorous caption (max 20 words):
 ```
 Semeval-Task-1-MWAHAHA/
 │
-├── data/                   # Input data files (from CodaBench)
-│   ├── dev/                # Development phase inputs
-│   └── eval/               # Evaluation phase inputs
-│
-├── src/                    # Source code
-│   ├── subtask_a/          # Text-based humor generation pipeline
-│   └── subtask_b/          # Image-based humor caption generation
-│
-├── outputs/                # Generated joke/caption outputs
-│
-├── baselines/              # Baseline prompts and outputs
-│
-├── requirements.txt        # Python dependencies
+├── Assignment3.ipynb       # Main notebook: GPT-2 fine-tuning & joke generation pipeline
+├── .gitattributes          # Git line-ending configuration
 └── README.md
 ```
 
-> **Note:** Data files are not included in this repository. Download them from the [CodaBench competition page](https://www.codabench.org/competitions/9719/).
+The entire pipeline — data loading, model fine-tuning, and inference — lives in `Assignment3.ipynb`, designed to run on **Google Colab** with a GPU runtime (T4).
+
+> **Note:** The training data (`output.jsonl`) and test file are not included in this repository. They must be uploaded manually when running the notebook in Colab.
 
 ---
 
 ## Setup & Installation
 
-### Prerequisites
+The notebook runs on **Google Colab**. No local installation is required.
 
-- Python 3.9+
-- pip
+1. Open the notebook directly in Colab:  
+   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mohid-arif/Semeval-Task-1-MWAHAHA/blob/main/Assignment3.ipynb)
 
-### Install Dependencies
+2. Set the runtime to **GPU** (T4 recommended): `Runtime → Change runtime type → T4 GPU`
 
-```bash
-git clone https://github.com/mohid-arif/Semeval-Task-1-MWAHAHA.git
-cd Semeval-Task-1-MWAHAHA
-pip install -r requirements.txt
-```
+3. Run all cells in order. When prompted, upload your `output.jsonl` training file and test CSV using the Colab file upload widget.
 
-### API Keys
+### Dependencies
 
-This project may use LLM APIs. Set the relevant environment variables before running:
+The notebook installs all required packages automatically:
 
 ```bash
-export OPENAI_API_KEY="your-key-here"
-# or
-export ANTHROPIC_API_KEY="your-key-here"
+pip install transformers datasets accelerate sentencepiece
 ```
+
+**Key libraries:**
+
+| Library | Version | Purpose |
+|---|---|---|
+| `transformers` | 4.57.3+ | GPT-2 model & tokenizer |
+| `datasets` | latest | Data loading from JSONL |
+| `accelerate` | latest | Training acceleration |
+| `pandas` | latest | Test data processing |
+| `tqdm` | latest | Progress bars |
 
 ---
 
 ## Usage
 
-### Subtask A — Text Generation
+All steps are contained within `Assignment3.ipynb`. The workflow proceeds as follows:
 
-```bash
-python src/subtask_a/generate.py \
-  --input data/eval/subtask_a_input.json \
-  --output outputs/subtask_a_output.json \
-  --lang en
-```
+**1. Upload training data** — use the Colab file upload cell to provide `output.jsonl`
 
-### Subtask B — Image Caption Generation
+**2. Fine-tune the model** — training runs automatically with the configured hyperparameters
 
-```bash
-python src/subtask_b/generate.py \
-  --input data/eval/subtask_b_input.json \
-  --output outputs/subtask_b_output.json \
-  --variant b1   # or b2
-```
+**3. Generate jokes** — the inference cell loads your fine-tuned model and generates jokes from test prompts
+
+**4. Download the model** — the trained model is zipped and downloaded as `gpt2-jokes-final.zip`
 
 ---
 
 ## Approach
 
-Our system explores prompt engineering and fine-tuning strategies to generate novel and contextually appropriate humor.
+Our system fine-tunes **GPT-2** on a jokes dataset formatted as prompt-completion pairs, then uses the fine-tuned model to generate novel jokes at inference time.
 
-### Subtask A
+### Model
 
-- **Prompting strategy:** We use chain-of-thought prompting to guide the model through joke structure (setup → punchline) before generating the final output.
-- **Constraint handling:** For word inclusion constraints, we prompt the model to naturally integrate the target words into the joke rather than appending them.
-- **Multilingual support:** For Spanish and Chinese, we append language instructions to the English base prompt.
+- **Base model:** `gpt2` (OpenAI GPT-2, loaded via HuggingFace Transformers)
+- **Task:** Causal language modelling fine-tuned on joke prompt-completion pairs
+- **Tokenizer:** `GPT2Tokenizer` with `pad_token` set to `eos_token`
 
-### Subtask B
+### Training
 
-- **Image understanding:** We extract the first frame of each GIF and pass it to a vision-language model along with a humor-focused system prompt.
-- **Caption generation:** The model is instructed to keep captions concise (≤ 20 words) and maximally humorous given the visual context.
+The model is fine-tuned using HuggingFace's `Trainer` API with the following configuration:
+
+```python
+TrainingArguments(
+    output_dir="./gpt2-jokes",
+    per_device_train_batch_size=2,
+    per_device_eval_batch_size=2,
+    gradient_accumulation_steps=8,  # effective batch size = 16
+    learning_rate=5e-5,
+    num_train_epochs=3,
+)
+```
+
+- **Max sequence length:** 256 tokens
+- **Train/validation split:** 95% / 5% (seed=42)
+- **Hardware:** Google Colab T4 GPU
+
+### Inference
+
+After training, jokes are generated using HuggingFace's `pipeline` API:
+
+```python
+generator = pipeline("text-generation", model="gpt2-jokes-final", device=0)
+prompt = "Headline: Government promises reform\nJoke:"
+```
+
+The model completes the prompt to produce a joke. Test inputs are read from a CSV file and predictions are written to an output file.
 
 ---
 
@@ -153,20 +165,6 @@ Our system explores prompt engineering and fine-tuning strategies to generate no
 Submissions are evaluated through **human preference judgments** in a pairwise "battle" format, where annotators choose the funnier of two outputs generated under the same constraint. Rankings are computed using an **Elo-based leaderboard**, hosted at [thefunnier.com](https://thefunnier.com/leaderboard).
 
 No labeled training data is provided by the organizers — participants are free to use any publicly available data, pre-trained models, or APIs.
-
----
-
-## Results
-
-| Subtask | System | Elo Score | Rank |
-|---|---|---|---|
-| A (EN) | Our System | — | — |
-| A (ES) | Our System | — | — |
-| A (ZH) | Our System | — | — |
-| B1 | Our System | — | — |
-| B2 | Our System | — | — |
-
-*(Results to be updated after competition evaluation.)*
 
 ---
 
@@ -179,4 +177,4 @@ No labeled training data is provided by the organizers — participants are free
 
 ---
 
-*This repository was created as part of a course/research project participation in SemEval 2026.*
+*This repository was created as part of a research project participation in SemEval 2026.*
